@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import the SignUp method 
-import { signUp } from '../utilities/users-services';
+import { signUp } from '../../utilities/users-services';
 
 export class SignUpForm extends Component {
     state = {
