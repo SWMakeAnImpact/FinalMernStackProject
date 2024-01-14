@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // import my functionality that I've added
-import { getUser } from '../../utilities/users-services';
+import { getUser } from '../utilities/users-services';
 
 // css
 // import './App.css'
@@ -16,7 +16,7 @@ import NewOrderPage from '../NewOrderPage/NewOrderPage';
 import OrderHistoryPage from '../OrderHistoryPage/OrderHistoryPage';
 
 // import components
-import NavBar from '../../components/NavBar/NavBar';
+import NavBar from '../components/NavBar/NavBar';
 
 function App() {
   const [user, setUser] = useState(getUser());
