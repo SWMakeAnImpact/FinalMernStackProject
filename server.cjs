@@ -1,36 +1,60 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+// bring in all dependencies
 require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
 
-// Import route handlers
-const userRoutes = require('./routes/userRoutes.cjs');
-const transactionRoutes = require('./routes/transactionRoutes.cjs');
+// define variables
+const PORT = process.env.PORT || 3001;
 
+// Connect to the database
+require('./config/database.cjs');
+
+// create my app
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+app.use(logger('dev'));
+app.use(express.json());
 
-// Body parser middleware to handle request bodies
-app.use(bodyParser.json());
+// Configure both serve-favicon and static middlewares
+// to serve from the production build folder
+// in our case, the folder is called 'dist' because that is
+// what vite names it when we run the build script
 
-// Routes
-app.use('/api/users', userRoutes);
-app.use('/api/transactions', transactionRoutes);
+// == note == we may not use this, so I'm commenting it out for now
+// and I'll uncomment when we use it
+// ==
+// app.use(favicon(path.join(__dirname, 'static', 'favicon.ico')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
-// Handle 404 - Resource Not Found
-app.use((req, res, next) => {
-  res.status(404).send("We think you are lost!");
+// Middleware to verify token and assign user object of payload to req.user.
+// Be sure to mount before routes
+app.use(require('./config/checkToken.cjs'));
+
+// Put API routes here, before the "catch all" routes
+app.get('/api/test', (req, res) => {
+    res.send('You just hit a API route');
+  });
+
+app.use('/api/users', require('./routes/api/users.cjs'));
+// we have included the line 
+// const userRouter = require('./routes/api/users.cjs')
+// app.use('/api/user', userRouter);
+
+// Protect the API routes below from anonymous users
+const ensureLoggedIn = require('./config/ensureLoggedIn.cjs');
+app.use('/api/items', ensureLoggedIn, require('./routes/api/items.cjs'));
+app.use('/api/orders', ensureLoggedIn, require('./routes/api/orders.cjs'));
+
+// The following "catch all" route (note the /*) is necessary
+// to return the index.html on all non-AJAX requests
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+
 });
 
-// Handle 500
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.sendFile(path.join(__dirname, '../public/500.html'));
-});
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, function () {
+    console.log(`Express app running on port: ${PORT}`);
+})
