@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // Import your CSS file for styling (if needed)
-import Popup from '../../components/PopUp/PopUp.jsx'; // Import the Popup component (if needed)
+import './LoginPage.css'; // Import your CSS file for styling 
+import Popup from '../../components/PopUp/PopUp.jsx'; // Import the Popup component 
 
 function LoginPage() {
     const [formData, setFormData] = useState({

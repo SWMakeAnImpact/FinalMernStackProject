@@ -1,4 +1,3 @@
-import React from 'react';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from './components/NavBar/NavBar.jsx';
 import HomePage from './pages/HomePage/HomePage.jsx';
