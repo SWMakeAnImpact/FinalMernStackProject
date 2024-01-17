@@ -1,16 +1,12 @@
 const express = require('express');
-const User = require('../models/User.cjs');
 const router = express.Router();
+const { register, login } = require('../../controllers/api/UserController.cjs');
 
 // Register a new user
-router.post('/register', (req, res) => {
-    // Logic to register a user
-});
+router.post('/register', register);
 
 // User login
-router.post('/login', (req, res) => {
-    // Logic for user login
-});
+router.post('/login', login);
 
 // ... other user-related routes ...
 

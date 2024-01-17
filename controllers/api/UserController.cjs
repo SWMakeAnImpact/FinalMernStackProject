@@ -1,6 +1,6 @@
-const User = require('../models/User.cjs');
-const bcrypt = require('bcryptjs');
-// Add more imports as needed (e.g., JWT for token handling)
+const User = require('../../models/User.cjs');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
     try {
@@ -14,7 +14,23 @@ exports.register = async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
-        res.status(201).json({ message: "User created successfully", user: newUser });
+        // Create JWT payload
+        const payload = {
+            user: {
+                id: newUser._id
+            }
+        };
+
+        // Sign the token with user payload and secret key
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET, // Make sure you have this secret in your environment variables
+            { expiresIn: '1h' }, // Token expiration time
+            (err, token) => {
+                if (err) throw err;
+                res.status(201).json({ message: "User created successfully", token });
+            }
+        );
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -36,9 +52,23 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        // Generate and return JWT token (implementation depends on your JWT setup)
+        // Create JWT payload
+        const payload = {
+            user: {
+                id: user._id
+            }
+        };
 
-        res.json({ message: "Logged in successfully" });
+        // Sign the token with user payload and secret key
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET, // Use the same secret as for registration
+            { expiresIn: '1h' }, // Token expiration time
+            (err, token) => {
+                if (err) throw err;
+                res.json({ message: "Logged in successfully", token });
+            }
+        );
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -1,26 +1,19 @@
 const express = require('express');
-const Transaction = require('../models/Transaction.cjs');
 const router = express.Router();
+const { addTransaction, updateTransaction, deleteTransaction, getTransactions } = require('../../controllers/api/TransactionController.cjs');
+
 
 // Add a new transaction
-router.post('/add', (req, res) => {
-    // Logic to add a new transaction
-});
+router.post('/add', addTransaction);
 
 // Edit a transaction
-router.put('/edit/:id', (req, res) => {
-    // Logic to edit a transaction
-});
+router.put('/edit/:id', updateTransaction);
 
 // Delete a transaction
-router.delete('/delete/:id', (req, res) => {
-    // Logic to delete a transaction
-});
+router.delete('/delete/:id', deleteTransaction);
 
 // Get all transactions for a user
-router.get('/all', (req, res) => {
-    // Logic to get all transactions
-});
+router.get('/all', getTransactions);
 
 // ... other transaction-related routes ...
 
