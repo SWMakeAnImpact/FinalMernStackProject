@@ -9,7 +9,8 @@ Currently, two official plugins are available:
 # mern-infrastructure-vite
 
 
-Based on our previous discussions and the setup of your MVP project, here is a customized `README.md` for your Personal Budget Manager application. This README includes instructions for setting up and running the application, as well as a brief overview of its features and technologies used.
+Wire Frames /And Graph
+www.canva.com/design/DAF6KYMC3tQ/4RDswvAN4Vw5gZNa3QhGxQ/view?utm_content=DAF6KYMC3tQ&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
 ---
 
